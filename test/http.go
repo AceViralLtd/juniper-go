@@ -35,7 +35,7 @@ func NewClient(router *gin.Engine) *Client {
 }
 
 // Request a page from the router
-func (client *Client) Request(path string, opts ...*RequestOpts) *httptest.ResponseRecorder {
+func (client *Client) Request(path string, opts ...*RequestOpts) Response {
 	var (
 		reader  io.Reader
 		options *RequestOpts
@@ -66,7 +66,9 @@ func (client *Client) Request(path string, opts ...*RequestOpts) *httptest.Respo
 
 	client.router.ServeHTTP(recorder, req)
 
-	return recorder
+	return Response{
+		Reader: recorder,
+	}
 }
 
 // outComeResponse is used to verify the outcome field in the response json
