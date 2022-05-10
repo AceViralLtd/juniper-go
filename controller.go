@@ -6,12 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ResponseMutateFunc takes the ckrrent response data and mutates it somehow
+type ResponseMutateFunc func(ctx *gin.Context, data *gin.H)
+
 // Controller shared logic for interacting with the gin framework
 //
 // This does not make an assumptions about the environment or dependencies
 // required by the final controllers that embed this struct
 type Controller struct {
-	InjectGlobalData func(ctx *gin.Context, data *gin.H)
+	InjectGlobalData ResponseMutateFunc
 }
 
 // JSON is just an alios of the gin context method that injects the hud data
