@@ -12,3 +12,27 @@ GOPRIVATE="github.com/acevrialltd" go get github.com/aceviralltd/juniper-go
 I have chosen a flat package structure (test excluded) as a purely asthetic choice on implementation  
 Havinge everything under the juniper. package name will be nicer
 
+### Cli
+Command line helper components
+
+### Controller
+Route base controller
+
+### Env
+Dotenv wrapper
+
+### Gorm 
+custom loggers (production/debug)
+
+### Log
+Custom gin log formatters
+
+### Response
+Common response shapes for generic http errors
+
+### Test
+http test helpers
+
+### Validation
+Custom struct tag extraction for validator
+
