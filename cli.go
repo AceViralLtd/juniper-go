@@ -36,7 +36,7 @@ func (ces CliCommandEntries) Find(key string) *CliCommandEntry {
 // CliUsage generator for the flags lib
 func CliUsage(title, description, binName string, register CliCommandEntries) func() {
 	return func() {
-		var builder *bytes.Buffer
+		var builder bytes.Buffer
 
 		builder.WriteString(title)
 		builder.WriteByte('\n')
