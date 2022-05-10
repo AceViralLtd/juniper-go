@@ -11,10 +11,12 @@ import (
 	"github.com/fatih/color"
 )
 
+type CliCommandFunc func() error
+
 type CliCommandEntry struct {
 	Key   string
 	Usage string
-	Run   func() error
+	Run   CliCommandFunc
 }
 
 // CommandEntries list
