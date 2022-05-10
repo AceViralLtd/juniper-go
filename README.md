@@ -24,6 +24,9 @@ Dotenv wrapper
 ### Gorm 
 custom loggers (production/debug)
 
+### JWT
+helpers for managing jwt's and bearer tokens
+
 ### Log
 Custom gin log formatters
 
