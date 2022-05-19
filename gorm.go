@@ -22,10 +22,17 @@ func GormLoggerProduction() logger.Interface {
 }
 
 // GormLoggerDebug will print all queries
-func GormLoggerDebug() logger.Interface {
-	fh, err := os.OpenFile("./query.log", os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		fh = os.Stdout
+func GormLoggerDebug(logPath *string) logger.Interface {
+	var (
+		err error
+		fh  = os.Stdout
+	)
+
+	if logPath != nil {
+		fh, err = os.OpenFile(*logPath, os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			fh = os.Stdout
+		}
 	}
 
 	return logger.New(

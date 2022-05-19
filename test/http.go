@@ -120,13 +120,13 @@ func (response *Response) Parse(t *testing.T, target any, opts ...*ParseOpts) {
 
 	outcomeTarget := outComeResponse{}
 	if err := json.Unmarshal(response.Reader.Body.Bytes(), &outcomeTarget); err != nil {
-		t.Fatal("response json did not have an outcome field")
+		t.Fatal("response json did not have an outcome field", response.Reader.Body.String())
 	}
 	if outcomeTarget.Outcome != options.Outcome {
 		t.Fatalf("did not return outcome: %t", options.Outcome)
 	}
 
 	if err := json.Unmarshal(response.Reader.Body.Bytes(), target); err != nil {
-		t.Fatal("response json could not be unmarshaled into the target struct")
+		t.Fatal("response json could not be unmarshaled into the target struct", response.Reader.Body.String())
 	}
 }
