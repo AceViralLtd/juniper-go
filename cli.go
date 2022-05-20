@@ -1,7 +1,6 @@
 package juniper
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
 	"os"
@@ -36,7 +35,7 @@ func (ces CliCommandEntries) Find(key string) *CliCommandEntry {
 // CliUsage generator for the flags lib
 func CliUsage(title, description, binName string, register CliCommandEntries) func() {
 	return func() {
-		var builder bytes.Buffer
+		var builder strings.Builder
 
 		builder.WriteString(title)
 		builder.WriteByte('\n')
