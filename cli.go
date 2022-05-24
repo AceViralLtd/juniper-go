@@ -10,7 +10,7 @@ import (
 	"github.com/fatih/color"
 )
 
-type CliCommandFunc func() error
+type CliCommandFunc func(args []string) error
 
 type CliCommandEntry struct {
 	Key   string
