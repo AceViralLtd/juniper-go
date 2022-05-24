@@ -4,10 +4,32 @@ Companion library for gin-gonic to provide common functionality across multiple 
 Balically im pulling out all the duplicate code from variaus web apps into here
 
 ## Installing
-The first time you install this package you will need to net GOPRIVATE envar
-```bash
-GOPRIVATE="github.com/acevrialltd" go get github.com/aceviralltd/juniper-go
+In order for this repo to be pulled you need to have a GOPRIVATE env setup on the pulling machine
+### Configure ~/.netrc
 ```
+machine github.com
+    login [github_username]
+    password [github_personal_access_token]
+
+machine api.github.com
+    login [github_username]
+    password [github_personal_access_token]
+```
+
+### Pull with direct GOPRIVATE env
+GOPRIVATE will be set for this operation only
+```bash
+GOPRIVATE="github.com/acevrialltd/juniper-go" go get github.com/aceviralltd/juniper-go
+```
+
+### Setup go env for private repos
+Set GOPRIVATE for all go get/install requests
+`~/.config/go/env`
+```
+GOPRIVATE=github.com/aceviralltd
+```
+
+
 ## Note for future matt
 I have chosen a flat package structure (test excluded) as a purely asthetic choice on implementation  
 Havinge everything under the juniper. package name will be nicer
@@ -17,6 +39,9 @@ Command line helper components
 
 ### Controller
 Route base controller
+
+### Cron
+Run cron tasks on a schedule, based on the cli register
 
 ### Env
 Dotenv wrapper
