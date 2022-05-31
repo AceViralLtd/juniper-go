@@ -10,7 +10,7 @@ import (
 
 	"github.com/1set/cronrange"
 	"github.com/go-playground/validator"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type CronTask struct {
