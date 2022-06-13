@@ -1,4 +1,4 @@
-module github.com/aceviralltd/juniper-go/echo
+module github.com/aceviralltd/juniper-go/v2
 
 go 1.18
 
