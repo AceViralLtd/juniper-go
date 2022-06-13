@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/labstack/echo/v4"
 )
 
 var ErrInvalidJWT = errors.New("Invalid jwt")
@@ -18,7 +18,7 @@ func GenerateJWT(claims jwt.MapClaims, appSecret string) (string, error) {
 
 // ExtractJwtFromAuthHeader will verify that the Authorization header both exists and is in the
 // Bearer format, if so it will extract the token (hopefully this should be a valid JWT)
-func ExtractJwtFromAuthHeader(ctx *gin.Context) string {
+func ExtractJwtFromAuthHeader(ctx echo.Context) string {
 	authHeader := ctx.GetHeader("Authorization")
 
 	if authHeader == "" {
