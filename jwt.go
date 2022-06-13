@@ -19,7 +19,7 @@ func GenerateJWT(claims jwt.MapClaims, appSecret string) (string, error) {
 // ExtractJwtFromAuthHeader will verify that the Authorization header both exists and is in the
 // Bearer format, if so it will extract the token (hopefully this should be a valid JWT)
 func ExtractJwtFromAuthHeader(ctx echo.Context) string {
-	authHeader := ctx.GetHeader("Authorization")
+	authHeader := ctx.Request().Header.Get("Authorization")
 
 	if authHeader == "" {
 		return ""
