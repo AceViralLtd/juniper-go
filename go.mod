@@ -7,20 +7,10 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-playground/validator/v10 v10.11.0
-	github.com/gofiber/fiber v1.14.6
 	github.com/joho/godotenv v1.4.0
 	github.com/labstack/echo v3.3.10+incompatible
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/gorm v1.23.5
-)
-
-require (
-	github.com/andybalholm/brotli v1.0.0 // indirect
-	github.com/gofiber/utils v0.0.10 // indirect
-	github.com/gorilla/schema v1.1.0 // indirect
-	github.com/klauspost/compress v1.10.7 // indirect
-	github.com/valyala/fasthttp v1.16.0 // indirect
-	github.com/valyala/tcplisten v0.0.0-20161114210144-ceec8f93295a // indirect
 )
 
 require (
