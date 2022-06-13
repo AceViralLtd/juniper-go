@@ -5,85 +5,111 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 )
 
-// LogFormatter for gin to use with aditional data
-func LogFormatter(param gin.LogFormatterParams) string {
-	var (
-		ipAddress   = param.ClientIP
-		countryCode = "A1"
-	)
+const LogTimeFormat = "2006-01-02 15:04:05"
 
-	if param.Latency > time.Minute {
-		// Truncate in a golang < 1.8 safe way
-		param.Latency = param.Latency - param.Latency%time.Second
+func DefaultLogger() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			var (
+				err       error
+				errString string
+				req       = ctx.Request()
+				res       = ctx.Response()
+				start     = time.Now()
+			)
+			if err = next(ctx); err != nil {
+				ctx.Error(err)
+				errString = err.Error()
+			}
+			stop := time.Now()
+
+			var (
+				ipAddress   = ctx.RealIP()
+				countryCode = "A1"
+			)
+
+			if cfIp := req.Header.Get("cf-connecting-ip"); cfIp != "" {
+				ipAddress = cfIp
+			} else if originalIp := req.Header.Get("x-original-forwarded-for"); originalIp != "" {
+				ipList := strings.Split(originalIp, ",")
+				ipAddress = ipList[0]
+			}
+
+			if cfCountry := req.Header.Get("cf-ipcountry"); cfCountry != "" {
+				countryCode = cfCountry
+			}
+
+			_, err = ctx.Logger().Output().Write([]byte(fmt.Sprintf(
+				"%v | %3d | %13s | %15s | %2s | %s %#v\n%s",
+				stop.Format(LogTimeFormat),
+				res.Status,
+				stop.Sub(start).String(),
+				ipAddress,
+				countryCode,
+				req.Method,
+				req.RequestURI,
+				errString,
+			)))
+
+			return err
+		}
 	}
-
-	if cfIp := param.Request.Header.Get("cf-connecting-ip"); cfIp != "" {
-		ipAddress = cfIp
-	} else if originalIp := param.Request.Header.Get("x-original-forwarded-for"); originalIp != "" {
-		ipList := strings.Split(originalIp, ",")
-		ipAddress = ipList[0]
-	}
-
-	if cfCountry := param.Request.Header.Get("cf-ipcountry"); cfCountry != "" {
-		countryCode = cfCountry
-	}
-
-	return fmt.Sprintf(
-		"%v | %3d | %13v | %15s | %2s | %-7s %#v\n%s",
-		param.TimeStamp.Format("2006-01-02 15:04:05"),
-		param.StatusCode,
-		param.Latency,
-		ipAddress,
-		countryCode,
-		param.Method,
-		param.Path,
-		param.ErrorMessage,
-	)
 }
 
-// LogFormatterWithAccountId takes the standard juniper log formatter an adds a user id to it
-func LogFormatterWithAccountId(accountKey string) func(gin.LogFormatterParams) string {
-	return func(param gin.LogFormatterParams) string {
-		var (
-			accountId   = "-guest-"
-			ipAddress   = param.ClientIP
-			countryCode = "A1"
-		)
+func AccountIdLogger(accountKey string) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			var (
+				err       error
+				errString string
+				req       = ctx.Request()
+				res       = ctx.Response()
+				start     = time.Now()
+			)
+			if err = next(ctx); err != nil {
+				ctx.Error(err)
+				errString = err.Error()
+			}
+			stop := time.Now()
 
-		if param.Latency > time.Minute {
-			// Truncate in a golang < 1.8 safe way
-			param.Latency = param.Latency - param.Latency%time.Second
+			var (
+				ipAddress   = ctx.RealIP()
+				accountId   = "-guest-"
+				countryCode = "A1"
+			)
+
+			if cfIp := req.Header.Get("cf-connecting-ip"); cfIp != "" {
+				ipAddress = cfIp
+			} else if originalIp := req.Header.Get("x-original-forwarded-for"); originalIp != "" {
+				ipList := strings.Split(originalIp, ",")
+				ipAddress = ipList[0]
+			}
+
+			if cfCountry := req.Header.Get("cf-ipcountry"); cfCountry != "" {
+				countryCode = cfCountry
+			}
+
+			if id, ok := ctx.Get(accountKey).(string); ok {
+				accountId = id
+			}
+
+			_, err = ctx.Logger().Output().Write([]byte(fmt.Sprintf(
+				"%v | %3d | %13s | %15s | %2s | %s | %s %#v\n%s",
+				stop.Format(LogTimeFormat),
+				res.Status,
+				stop.Sub(start).String(),
+				ipAddress,
+				countryCode,
+				accountId,
+				req.Method,
+				req.RequestURI,
+				errString,
+			)))
+
+			return err
 		}
-
-		if id, ok := param.Keys[accountKey]; ok {
-			accountId, _ = id.(string)
-		}
-
-		if cfIp := param.Request.Header.Get("cf-connecting-ip"); cfIp != "" {
-			ipAddress = cfIp
-		} else if originalIp := param.Request.Header.Get("x-original-forwarded-for"); originalIp != "" {
-			ipList := strings.Split(originalIp, ",")
-			ipAddress = ipList[0]
-		}
-
-		if cfCountry := param.Request.Header.Get("cf-ipcountry"); cfCountry != "" {
-			countryCode = cfCountry
-		}
-
-		return fmt.Sprintf(
-			"%v | %3d | %13v | %15s | %s | %2s | %-7s %#v\n%s",
-			param.TimeStamp.Format("2006-01-02 15:04:05"),
-			param.StatusCode,
-			param.Latency,
-			ipAddress,
-			countryCode,
-			accountId,
-			param.Method,
-			param.Path,
-			param.ErrorMessage,
-		)
 	}
 }

@@ -1,11 +1,13 @@
 package juniper
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/labstack/echo/v4"
+)
 
 var (
-	ResponseSuccess      = gin.H{"outcome": true, "message": nil}
-	ResponseNotFound     = gin.H{"outcome": false, "message": "Not Found"}
-	ResponseFailed       = gin.H{"outcome": false, "message": "Failed"}
-	ResponseBadInput     = gin.H{"outcome": false, "message": "Bad Input"}
-	ResponseUnauthorized = gin.H{"outcome": false, "message": "Unauthorized"}
+	ResponseSuccess      = echo.Map{"outcome": true, "message": nil}
+	ResponseNotFound     = echo.Map{"outcome": false, "message": "Not Found"}
+	ResponseFailed       = echo.Map{"outcome": false, "message": "Failed"}
+	ResponseBadInput     = echo.Map{"outcome": false, "message": "Bad Input"}
+	ResponseUnauthorized = echo.Map{"outcome": false, "message": "Unauthorized"}
 )

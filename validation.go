@@ -4,15 +4,24 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"github.com/labstack/echo/v4"
 )
 
+type inputValidator struct {
+	validator *validator.Validate
+}
+
+func (val *inputValidator) Validate(i interface{}) error {
+	return val.validator.Struct(i)
+}
+
 // InitializeValidator with the field extractor procedure
-func InitializeValidator() {
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterTagNameFunc(ValidationFieldExtractor)
-	}
+func InitializeValidator(router *echo.Echo) {
+	v := &inputValidator{validator.New()}
+	v.validator.RegisterTagNameFunc(ValidationFieldExtractor)
+
+	router.Validator = v
 }
 
 // ValidationFieldExtractor will extract the most appripriate field name it can

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
 )
 
 // RequestOpts can be used to modify the request behavior
@@ -26,11 +26,11 @@ var defaultRequestOptions = &RequestOpts{
 
 // Client for testing http requests
 type Client struct {
-	router *gin.Engine
+	router *echo.Echo
 }
 
 // NewClient for making test http requests
-func NewClient(router *gin.Engine) *Client {
+func NewClient(router *echo.Echo) *Client {
 	return &Client{router: router}
 }
 
