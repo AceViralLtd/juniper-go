@@ -5,7 +5,7 @@ import (
 )
 
 // ResponseMutateFunc takes the ckrrent response data and mutates it somehow
-type ResponseMutateFunc func(ctx echo.Context, data echo.Map)
+type ResponseMutateFunc func(ctx echo.Context, data *echo.Map)
 
 // Controller shared logic for interacting with the echo work
 //
@@ -18,7 +18,7 @@ type Controller struct {
 // JSON is just an alios of the echo context method that injects the hud data
 func (con Controller) JSON(ctx echo.Context, code int, data echo.Map) error {
 	if con.InjectGlobalData != nil {
-		con.InjectGlobalData(ctx, data)
+		con.InjectGlobalData(ctx, &data)
 	}
 
 	return ctx.JSON(code, data)
