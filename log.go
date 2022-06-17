@@ -43,7 +43,7 @@ func DefaultLogger() echo.MiddlewareFunc {
 			}
 
 			_, err = ctx.Logger().Output().Write([]byte(fmt.Sprintf(
-				"%v | %3d | %13s | %15s | %2s | %s %#v\n%s",
+				"%v | %d | %s | %s | %s | %s %#v\n%s",
 				stop.Format(LogTimeFormat),
 				res.Status,
 				stop.Sub(start).String(),
@@ -97,7 +97,7 @@ func AccountIdLogger(accountKey string) echo.MiddlewareFunc {
 			}
 
 			_, err = ctx.Logger().Output().Write([]byte(fmt.Sprintf(
-				"%v | %3d | %13s | %15s | %2s | %s | %s %#v\n%s",
+				"%v | %d | %s | %s | %s | %s | %s %#v\n%s",
 				stop.Format(LogTimeFormat),
 				res.Status,
 				stop.Sub(start).String(),
