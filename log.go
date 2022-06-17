@@ -50,7 +50,7 @@ func DefaultLogger() echo.MiddlewareFunc {
 				ipAddress,
 				countryCode,
 				req.Method,
-				req.RequestURI,
+				req.URL.RawPath,
 				errString,
 			)))
 
@@ -105,7 +105,7 @@ func AccountIdLogger(accountKey string) echo.MiddlewareFunc {
 				countryCode,
 				accountId,
 				req.Method,
-				req.RequestURI,
+				req.URL.RawPath,
 				errString,
 			)))
 
