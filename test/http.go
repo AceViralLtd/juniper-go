@@ -18,6 +18,7 @@ type RequestOpts struct {
 	Body        *url.Values
 	BearerToken string
 	Method      string
+	Headers     map[string]string
 }
 
 var defaultRequestOptions = &RequestOpts{
@@ -62,6 +63,12 @@ func (client *Client) Request(path string, opts ...*RequestOpts) Response {
 	}
 	if options.BearerToken != "" {
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", options.BearerToken))
+	}
+
+    if len(options.Headers) > 0 {
+		for key, val := range options.Headers {
+			req.Header.Set(key, val)
+		}
 	}
 
 	client.router.ServeHTTP(recorder, req)
