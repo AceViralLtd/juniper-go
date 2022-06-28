@@ -1,8 +1,6 @@
 package juniper
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,40 +38,40 @@ func (con Controller) AbortWithStatusJSON(ctx *gin.Context, code int, data gin.H
 // This will actually bind from any source not just form data
 //
 // if it fails then abort will be auto called
-func (con Controller) BindForm(ctx *gin.Context, input interface{}) (err error) {
-	if err = ctx.ShouldBind(input); err != nil {
-		con.AbortWithStatusJSON(ctx, http.StatusBadRequest, gin.H{
+func (con Controller) BindForm(ctx *gin.Context, input interface{}) *gin.H {
+	if err := ctx.ShouldBind(input); err != nil {
+		return &gin.H{
 			"outcome": false,
 			"message": "Bad Input",
 			"fields":  errorFIelds(err),
-		})
+		}
 	}
 
-	return
+	return nil
 }
 
 // BindUri attempt to bind path input to struct
 //
 // if it fails then abort will be auto called
-func (con Controller) BindUri(ctx *gin.Context, input interface{}) (err error) {
-	if err = ctx.ShouldBindUri(input); err != nil {
-		con.AbortWithStatusJSON(ctx, http.StatusNotFound, ResponseNotFound)
+func (con Controller) BindUri(ctx *gin.Context, input interface{}) *gin.H {
+	if err := ctx.ShouldBindUri(input); err != nil {
+		return &ResponseNotFound
 	}
 
-	return
+	return nil
 }
 
 // bindForm attempt to bind query string input to struct
 //
 // if it fails then abort will be auto called
-func (con Controller) BindQuery(ctx *gin.Context, input interface{}) (err error) {
-	if err = ctx.ShouldBindQuery(input); err != nil {
-		con.AbortWithStatusJSON(ctx, http.StatusBadRequest, gin.H{
+func (con Controller) BindQuery(ctx *gin.Context, input interface{}) *gin.H {
+	if err := ctx.ShouldBindQuery(input); err != nil {
+		return &gin.H{
 			"outcome": false,
 			"message": "Bad Input",
 			"fields":  errorFIelds(err),
-		})
+		}
 	}
 
-	return
+	return nil
 }
