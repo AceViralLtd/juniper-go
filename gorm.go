@@ -82,7 +82,7 @@ func (pag *Paginator) GetOffset() int {
 	return pag.GetLimit() * (pag.GetPage() - 1)
 }
 
-func Paginate(db *gorm.DB, model interface{}, inator *Paginator) func(*gorm.DB) *gorm.DB {
+func Paginate(db *gorm.DB, model interface{}, inator *Paginator) *gorm.DB {
 	var rowCount int64
 	db.Model(model).Count(&rowCount)
 
@@ -92,7 +92,5 @@ func Paginate(db *gorm.DB, model interface{}, inator *Paginator) func(*gorm.DB) 
 		inator.Pages = append(inator.Pages, i)
 	}
 
-	return func(db *gorm.DB) *gorm.DB {
-		return db.Offset(inator.GetOffset()).Limit(inator.GetLimit())
-	}
+	return db.Offset(inator.GetOffset()).Limit(inator.GetLimit())
 }
