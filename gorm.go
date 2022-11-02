@@ -2,9 +2,11 @@ package juniper
 
 import (
 	"log"
+	"math"
 	"os"
 	"time"
 
+	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
@@ -44,4 +46,53 @@ func GormLoggerDebug(logPath *string) logger.Interface {
 			Colorful:                  false,
 		},
 	)
+}
+
+type Paginator struct {
+	Limit int   `json:"limit,omitempty" form:"limit"`
+	Page  int   `json:"page,omitempty" form:"page"`
+	Pages []int `json:"pages"`
+
+	defaultLimit int
+}
+
+func NewPaginator(limit int) *Paginator {
+	return &Paginator{
+		defaultLimit: limit,
+	}
+}
+
+func (pag *Paginator) GetPage() int {
+	if pag.Page == 0 {
+		pag.Page = 1
+	}
+
+	return pag.Page
+}
+
+func (pag *Paginator) GetLimit() int {
+	if pag.Limit == 0 {
+		pag.Limit = pag.defaultLimit
+	}
+
+	return pag.Limit
+}
+
+func (pag *Paginator) GetOffset() int {
+	return pag.GetLimit() * (pag.GetPage() - 1)
+}
+
+func Paginate(db *gorm.DB, model interface{}, inator *Paginator) func(*gorm.DB) *gorm.DB {
+	var rowCount int64
+	db.Model(model).Count(&rowCount)
+
+	pageCount := int(math.Ceil(float64(rowCount) / float64(inator.GetLimit())))
+	inator.Pages = make([]int, 0, pageCount)
+	for i := 1; i <= pageCount; i++ {
+		inator.Pages = append(inator.Pages, i)
+	}
+
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Offset(inator.GetOffset()).Limit(inator.GetLimit())
+	}
 }
