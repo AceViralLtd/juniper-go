@@ -18,12 +18,18 @@ type t_Rules struct {
 func TestErrorExtraction(t *testing.T) {
 	testCases := []struct {
 		TestName string
-		Expected []string
+		Expected map[string]string
 		Data     t_Rules
 	}{
-		{"No Errors", nil, t_Rules{"Frank", "frank@email.com", 25, 1, "FF"}},
-		{"All Errors", []string{"name", "email", "age", "Gender", "Initials"}, t_Rules{}},
-		{"One Error", []string{"email"}, t_Rules{"George", "", 20, 2, "GG"}},
+		{"No Errors", map[string]string{}, t_Rules{"Frank", "frank@email.com", 25, 1, "FF"}},
+		{"All Errors", map[string]string{
+			"name":     "required",
+			"email":    "required",
+			"age":      "required",
+			"Gender":   "required",
+			"Initials": "required",
+		}, t_Rules{}},
+		{"One Error", map[string]string{"email": "required"}, t_Rules{"George", "", 20, 2, "GG"}},
 	}
 
 	validate := validator.New()

@@ -33,13 +33,13 @@ func ValidationFieldExtractor(field reflect.StructField) string {
 // errorFIelds wil extract the field names from validation errors
 //
 // this will be the JSON field names, not the go struct field names
-func errorFIelds(errors interface{}) []string {
-	var fields []string
+func errorFIelds(errors interface{}) map[string]string {
+	fields := make(map[string]string)
 
 	switch val := errors.(type) {
 	case validator.ValidationErrors:
 		for _, err := range val {
-			fields = append(fields, err.Field())
+			fields[err.Field()] = err.Tag()
 		}
 	}
 
