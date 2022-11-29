@@ -91,6 +91,7 @@ func RunCranTasks(tasks []CronTask, register CliCommandEntries) CronErrors {
 				return
 			}
 
+			log.Printf("Cron: running %s", task.Command)
 			entry := register.Find(task.Command)
 			if entry == nil {
 				log.Printf("Command '%s' not found", task.Command)
