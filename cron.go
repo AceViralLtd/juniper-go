@@ -73,8 +73,8 @@ func (ce CronErrors) Error() string {
 	return errString.String()
 }
 
-// RunCranTasks that have hit their trigger
-func RunCranTasks(tasks []CronTask, register CliCommandEntries) CronErrors {
+// RunCronTasks that have hit their trigger
+func RunCronTasks(tasks []CronTask, register CliCommandEntries) CronErrors {
 	var (
 		wg     sync.WaitGroup
 		errors = make(CronErrors)
