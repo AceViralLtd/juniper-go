@@ -35,8 +35,8 @@ if err := command.Run(flag.Args()); err != nil {
 }
 ```
 
-### Controller
-Route base controller
+### Controller (deprecated)
+Route base controller 
 
 ### Cron
 Run cron tasks on a schedule, based on the cli register
