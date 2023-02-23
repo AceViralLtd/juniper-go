@@ -34,7 +34,7 @@ func GetEnvInt(key string, fallback ...int) int {
 	}
 
 	parsed, err := strconv.Atoi(val)
-	if err != nil {
+	if err != nil && len(fallback) > 0 {
 		return fallback[0]
 	}
 
