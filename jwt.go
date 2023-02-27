@@ -53,7 +53,7 @@ func VerifyJwt(jwtString, secret string) (jwt.MapClaims, error) {
 }
 
 // GenerateJWT will generate a new JWT for the given account model
-func GenerateJWT(claims jwt.MapClaims, appSecret string) (string, error) {
+func GenerateJWT(claims jwt.Claims, appSecret string) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).
 		SignedString([]byte(appSecret))
 }
