@@ -11,7 +11,7 @@ var envLoaded bool
 
 // GetEnv (an environment variable) by name This should be used over os.Getenv to ensure that the dotenv file has been loaded
 func GetEnv(key string, fallback ...string) string {
-	loadEnv()
+	LoadEnv()
 
 	val := os.Getenv(key)
 
@@ -25,7 +25,7 @@ func GetEnv(key string, fallback ...string) string {
 // GetEnvInt (an environment variable) by name This should be used over os.Getenv to ensure that the dotenv file has been loaded
 // vaule will be returned as an int
 func GetEnvInt(key string, fallback ...int) int {
-	loadEnv()
+	LoadEnv()
 
 	val := os.Getenv(key)
 
@@ -41,8 +41,8 @@ func GetEnvInt(key string, fallback ...int) int {
 	return parsed
 }
 
-// loadEnv from the .env file specifed in the DOT_ENV variable
-func loadEnv() {
+// LoadEnv from the .env file specifed in the DOT_ENV variable
+func LoadEnv() {
 	if envLoaded {
 		return
 	}
@@ -54,5 +54,4 @@ func loadEnv() {
 	} else if err := godotenv.Load(); err != nil {
 		envLoaded = true
 	}
-
 }
